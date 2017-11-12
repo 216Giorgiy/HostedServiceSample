@@ -1,0 +1,153 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Hosted Service Sample";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>Messages</h2>
+
+<div class="row">
+    <div class="col-md-9">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Instructions</h3>
+            </div>
+            <div class="panel-body">
+                <ol>
+                    <li>Add a few messages to the database.</li>
+                    <li>Note that the <code>MessageProcessingService</code> provides Pig Latin translations of your messages every five seconds.</li>
+                    <li>Every 30 seconds, the <code>WordCountingService</code> executes and provides a count of each word in the current messages.</li>
+                    <li>Select the stop service buttons to stop the services.</li>
+                </ol>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+
+        <form method="post">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add a message</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label asp-for="Message.Text"></label>
+                        <input asp-for="Message.Text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" asp-page-handler="AddMessage" class="btn btn-default">Add Message</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+
+        <form method="post">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <button type="submit" asp-page-handler="DeleteAllMessages" class="pull-right btn btn-danger">Clear All</button>
+                    <h3 class="panel-title" style="line-height:2.1">Messages &amp; Word Counts</h3>
+                </div>
+                <div class="panel-body">
+                    <button type="submit" asp-page-handler="Refresh" class="btn btn-success">Refresh Display</button>
+                    @if (Model.Messages.Count == 0)
+                    {
+                        <h3>There are no messages to display.</h3>
+                        <p>Please add some messages to process.</p>
+                    }
+                    else
+                    {
+                        <h3>Messages</h3>
+                        <p>Pig Latin translations are updated every 5 seconds.</p>
+                        <table class="table table-striped">
+                            <thead>
+                                <th></th>
+                                <th>@Html.DisplayNameFor(model => model.Messages[0].Text)</th>
+                                <th>@Html.DisplayNameFor(model => model.Messages[0].ProcessedText)</th>
+                            </thead>
+                            <tbody>
+                                @foreach (var message in Model.Messages)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button type="submit" class="btn btn-danger" style="margin-bottom:2px" asp-page-handler="DeleteMessage" asp-route-id="@message.Id">Delete</button>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(messageItem => message.Text)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(messageItem => message.ProcessedText)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    <hr>
+                    @if (Model.Words.Count == 0)
+                    {
+                        <h3>Word counts are unavailable at this time.</h3>
+                        <p>Word counts are updated every minute. Please check back soon!</p>
+                    }
+                    else
+                    {
+                        <h3>Word Counts</h3>
+                        <p>Word counts are updated every 30 seconds.</p>
+                        <table class="table table-striped">
+                            <thead>
+                                <th>@Html.DisplayNameFor(model => model.Words[0].Text)</th>
+                                <th class="text-center">@Html.DisplayNameFor(model => model.Words[0].Count)</th>
+                            </thead>
+                            <tbody>
+                                @foreach (var word in Model.Words)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(wordItem => word.Text)
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(wordItem => word.Count)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+
+        <form method="post">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Stop Processing</h3>
+                </div>
+                <div class="panel-body">
+                    <form method="post">
+                        <button type="submit" asp-page-handler="StopMessageProcessingService" class="btn btn-danger">Stop Message Processing</button>
+                        <button type="submit" asp-page-handler="StopWordCountingService" class="btn btn-danger">Stop Counting Words</button>
+                    </form>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

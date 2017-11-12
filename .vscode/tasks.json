@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "command": "cmd",
+    "args": [
+        "/c"
+    ],
+    "tasks": [
+        {
+            "type": "shell",
+            "taskName": "restore",
+            "label": "restore",
+            "command" : "dotnet restore",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "shell",
+            "taskName": "publish",
+            "label": "publish",
+            "command" : "dotnet publish --configuration Release",
+            "group": "none",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "shell",
+            "taskName": "build",
+            "label": "build",
+            "command" : "dotnet build --configuration Debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "shell",
+            "taskName": "info",
+            "label": "info",
+            "command" : "dotnet --info",
+            "group": "none"
+        }
+    ]
+}
+
