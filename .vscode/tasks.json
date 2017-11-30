@@ -7,14 +7,11 @@
     "tasks": [
         {
             "type": "shell",
-            "taskName": "restore",
             "label": "restore",
-            "command" : "dotnet restore",
-            "problemMatcher": "$msCompile"
+            "command": "dotnet restore"
         },
         {
             "type": "shell",
-            "taskName": "publish",
             "label": "publish",
             "command" : "dotnet publish --configuration Release",
             "group": "none",
@@ -22,7 +19,6 @@
         },
         {
             "type": "shell",
-            "taskName": "build",
             "label": "build",
             "command" : "dotnet build --configuration Debug",
             "group": {
@@ -33,7 +29,6 @@
         },
         {
             "type": "shell",
-            "taskName": "info",
             "label": "info",
             "command" : "dotnet --info",
             "group": "none"
